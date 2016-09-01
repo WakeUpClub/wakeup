@@ -21,7 +21,7 @@ public class RetrofitUtil {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         retrofit = new Retrofit.Builder()
-                .baseUrl(Api.BASEURL)
+                .baseUrl(Api.BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -33,7 +33,7 @@ public class RetrofitUtil {
             OkHttpClient okHttpClient = new OkHttpClient();
             okHttpClient.setConnectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
             retrofit = new Retrofit.Builder()
-                    .baseUrl(Api.BASEURL)
+                    .baseUrl(Api.BASE_URL)
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

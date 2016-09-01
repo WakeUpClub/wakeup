@@ -1,6 +1,8 @@
 package com.wakeup.forever.wakeup.model.bean;
 
-public class Share {
+import org.litepal.crud.DataSupport;
+
+public class Share extends DataSupport {
 
 	public Share() {
 		// TODO Auto-generated constructor stub

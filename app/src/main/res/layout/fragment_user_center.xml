@@ -4,9 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/ll_userCenter"
+    android:background="@color/bitGray"
     tools:context="com.wakeup.forever.wakeup.view.fragment.UserCenterFragment">
 
     <!-- TODO: Update blank fragment layout -->
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,16 +24,18 @@
             android:layout_marginLeft="10dp"
             />
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:text="个人设置"
             android:layout_marginLeft="70dp"
             android:gravity="center"
             android:textSize="20sp"
+            android:src="@drawable/wakeup_blue"
             />
     </RelativeLayout>
+
+
 
     <View
         android:layout_width="match_parent"

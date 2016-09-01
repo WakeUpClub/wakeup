@@ -1,14 +1,14 @@
 package com.wakeup.forever.wakeup.presenter.fragmentPresenter;
 
-import android.util.Log;
-
 import com.jude.beam.expansion.BeamBasePresenter;
+import com.wakeup.forever.wakeup.app.App;
 import com.wakeup.forever.wakeup.base.BaseSubscriber;
 import com.wakeup.forever.wakeup.config.GlobalConstant;
 import com.wakeup.forever.wakeup.model.DataManager.UserCacheManager;
 import com.wakeup.forever.wakeup.model.DataManager.UserDataManager;
 import com.wakeup.forever.wakeup.model.bean.HttpResult;
 import com.wakeup.forever.wakeup.model.bean.User;
+import com.wakeup.forever.wakeup.utils.PrefUtils;
 import com.wakeup.forever.wakeup.view.fragment.HomeFragment;
 
 import org.litepal.crud.DataSupport;
@@ -22,13 +22,15 @@ import java.util.List;
 public class HomeFragmentPresenter extends BeamBasePresenter<HomeFragment> {
 
     public void initData() {
+        String token= PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN,"");
+        if(token.isEmpty()){
+            return;
+        }
         User userTemp = UserCacheManager.getUser();
         if(userTemp!=null){
-            Log.e("zs",userTemp.getId()+"Id");
             getView().showUserInfo(userTemp);
         }
         List<User> users=DataSupport.findAll(User.class);
-        Log.e("zs",users.size()+"个");
         UserDataManager.getInstance().getUserInfo(new BaseSubscriber<HttpResult<User>>(getView().getActivity()) {
             @Override
             public void onSuccess(HttpResult<User> userHttpResult) {

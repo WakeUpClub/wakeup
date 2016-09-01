@@ -5,8 +5,6 @@ package com.wakeup.forever.wakeup.config;
  */
 public class Api {
 
-    public static String BASEURL = "http://121.42.163.226:8080/wakeup/";
-
-
+    public static String BASE_URL = "http://121.42.163.226:8080/wakeup/";
 
 }

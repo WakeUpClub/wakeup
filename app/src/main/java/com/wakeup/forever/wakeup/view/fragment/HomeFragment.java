@@ -58,8 +58,6 @@ public class HomeFragment extends BeamFragment<HomeFragmentPresenter> {
     @Bind(R.id.ll_home)
     LinearLayout llHome;
 
-    private boolean updateInfo = true;
-
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -82,11 +80,12 @@ public class HomeFragment extends BeamFragment<HomeFragmentPresenter> {
     @Override
     public void onStart() {
         super.onStart();
-        updateInfo = true;
+
         initView();
         getPresenter().initData();
-
     }
+
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -106,7 +105,7 @@ public class HomeFragment extends BeamFragment<HomeFragmentPresenter> {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), HomeDetailActivity.class);
-                i.putExtra(GlobalConstant.FLAG, GlobalConstant.USER_CENTER);
+                i.putExtra(GlobalConstant.FLAG, HomeDetailActivity.USER_CENTER);
                 startActivity(i);
             }
         });

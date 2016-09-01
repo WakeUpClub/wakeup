@@ -1,5 +1,6 @@
 package com.wakeup.forever.wakeup.utils;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,7 +9,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -23,7 +23,7 @@ public class GetImageUtils {
     public static final int PHOTO_CARMERA = 1;
     public static final int PHOTO_PICK = 2;
     public static final int PHOTO_CUT = 3;
-    private Fragment mActivity;
+    private Activity mActivity;
     private ImageView img;
     private File tempFile;
     private String[] items = {"拍照", "相册"};
@@ -49,7 +49,7 @@ public class GetImageUtils {
         }
     };
 
-    public GetImageUtils(Fragment mActivity, File tfile, ImageView imageView) {
+    public GetImageUtils(Activity mActivity, File tfile, ImageView imageView) {
         this.mActivity = mActivity;
         tempFile = tfile;
         img = imageView;
@@ -72,17 +72,15 @@ public class GetImageUtils {
         intent.putExtra("fullScreen", false); // 全屏
         intent.putExtra("showActionIcons", false);
         // 指定调用相机拍照后照片的存储路径
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
         mActivity.startActivityForResult(intent, PHOTO_CARMERA);
     }
 
     // 调用系统相册
     public void startPick(DialogInterface dialog) {
         dialog.dismiss();
-        Intent intent = new Intent(Intent.ACTION_PICK, null);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 "image/*");
-        Log.e("zs","即将选择图片");
         mActivity.startActivityForResult(intent, PHOTO_PICK);
     }
 
@@ -111,7 +109,6 @@ public class GetImageUtils {
             img.setImageBitmap(bmp);
 
             saveCropPic(bmp);
-            Log.i("MainActivity", tempFile.getAbsolutePath());
         }
     }
 
@@ -142,7 +139,7 @@ public class GetImageUtils {
 
     public void showDialog() {
         AlertDialog.Builder dialog = getListDialogBuilder(
-                mActivity.getActivity(), items, title, dialogListener);
+                mActivity, items, title, dialogListener);
         dialog.show();
     }
 

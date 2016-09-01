@@ -8,48 +8,63 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.wakeup.forever.wakeup.R;
-import com.wakeup.forever.wakeup.model.bean.Share;
+import com.wakeup.forever.wakeup.model.bean.CommonShare;
+import com.wakeup.forever.wakeup.model.bean.CommonShareLike;
+import com.wakeup.forever.wakeup.utils.LogUtil;
 import com.wakeup.forever.wakeup.view.viewholder.CommonShareHolder;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
- * Created by forever on 2016/8/26.
+ * Created by forever on 2016/8/29.
  */
 public class CommonShareAdapter extends RecyclerView.Adapter<CommonShareHolder> {
 
-    private ArrayList<Share> shareList;
+    private ArrayList<CommonShare> commonShareList;
     private Context context;
     private CommonShareHolder commonShareHolder;
 
-    public CommonShareAdapter(ArrayList<Share> shareList, Context context){
-        this.shareList=shareList;
+    public CommonShareAdapter(Context context,ArrayList<CommonShare> commonShareList){
         this.context=context;
+        this.commonShareList=commonShareList;
     }
-
     @Override
     public CommonShareHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View baseShareItem= LayoutInflater.from(context).inflate(R.layout.layout_base_share,parent,false);
-        commonShareHolder=new CommonShareHolder(baseShareItem);
+        View baseCommonShareItem= LayoutInflater.from(context).inflate(R.layout.layout_common_share_item,null);
+        commonShareHolder=new CommonShareHolder(baseCommonShareItem);
         return commonShareHolder;
     }
 
     @Override
     public void onBindViewHolder(CommonShareHolder holder, int position) {
-        Share share=shareList.get(position);
-        holder.getTvViewCount().setText(share.getViewCount()+"");   //setText一定要为String类型，否则会爆ResourceNotFound错误
-        holder.getTvFavouriteCount().setText(share.getLikeCount()+"");
-        holder.getTvAuthor().setText(share.getAuthorName());
-        holder.getTvTitle().setText(share.getTitle());
+        CommonShare commonShare=commonShareList.get(position);
         Glide.with(context)
-                .load(share.getImageLink())
+                .load(commonShare.getUser().getHeadURL())
                 .error(R.drawable.head)
                 .crossFade()
+                .into(holder.getCivAuthorImage());
+        holder.getTvAuthorName().setText(commonShare.getUser().getName());
+        holder.getTvPublishTime().setText(new Date(commonShare.getPublishTime()).toLocaleString());
+        holder.getTvContent().setText(commonShare.getContent());
+        Glide.with(context)
+                .load(commonShare.getImageDesc())
+                .error(R.drawable.splash01)
+                .crossFade()
                 .into(holder.getIvImageDesc());
+        holder.getTvShareViewedCount().setText(commonShare.getViewCount()+"");
+        StringBuffer likeUser=new StringBuffer("　　　");
+        LogUtil.e(likeUser.length()+"哪了");
+        for(CommonShareLike commonShareLike:commonShare.getLikedList()){
+            likeUser.append(commonShareLike.getUserName()+",");
+            LogUtil.e(commonShareLike.getUserName());
+        }
+        likeUser.replace(likeUser.length()-1,likeUser.length()-1,"等人覺得很贊");
+        holder.getTvLikeUser().setText(likeUser);
     }
 
     @Override
     public int getItemCount() {
-        return shareList.size();
+        return commonShareList.size();
     }
 }

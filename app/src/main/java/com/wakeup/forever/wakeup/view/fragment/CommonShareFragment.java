@@ -1,22 +1,27 @@
 package com.wakeup.forever.wakeup.view.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.jude.beam.bijection.BeamFragment;
 import com.jude.beam.bijection.RequiresPresenter;
 import com.wakeup.forever.wakeup.R;
-import com.wakeup.forever.wakeup.model.bean.Share;
+import com.wakeup.forever.wakeup.model.bean.CommonShare;
 import com.wakeup.forever.wakeup.presenter.adapter.CommonShareAdapter;
 import com.wakeup.forever.wakeup.presenter.fragmentPresenter.CommonShareFragmentPresenter;
-import com.wakeup.forever.wakeup.utils.LogUtil;
+import com.wakeup.forever.wakeup.utils.SnackBarUtil;
+import com.wakeup.forever.wakeup.view.activity.PublishCommonShareActivity;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
 
@@ -32,8 +37,17 @@ public class CommonShareFragment extends BeamFragment<CommonShareFragmentPresent
 
     @Bind(R.id.rv_commonShares)
     RecyclerView rvCommonShares;
+    @Bind(R.id.srl_refreshCommonShare)
+    SwipeRefreshLayout srlRefreshCommonShare;
+    @Bind(R.id.fab_addShare)
+    FloatingActionButton fabAddShare;
+    @Bind(R.id.fl_commonShare)
+    FrameLayout flCommonShare;
 
     private CommonShareAdapter commonShareAdapter;
+    private ArrayList<CommonShare> commonShareList;
+    private LinearLayoutManager linearLayoutManager;
+    private int lastVisibleItem;
 
     public CommonShareFragment() {
         // Required empty public constructor
@@ -56,21 +70,68 @@ public class CommonShareFragment extends BeamFragment<CommonShareFragmentPresent
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onStart() {
+        super.onStart();
         initView();
+        initListener();
+    }
+
+    private void initListener() {
+        srlRefreshCommonShare.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getPresenter().refreshData();
+            }
+        });
+        fabAddShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), PublishCommonShareActivity.class));
+            }
+        });
+
+        rvCommonShares.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if ((newState == RecyclerView.SCROLL_STATE_IDLE) && (lastVisibleItem + 2 > commonShareList.size())) {
+                    getPresenter().loadMore();
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+            }
+        });
     }
 
     private void initView() {
-        LogUtil.e("进入initView");
-        getPresenter().initData();
+        commonShareList = new ArrayList<CommonShare>();
+        commonShareAdapter = new CommonShareAdapter(getContext(), commonShareList);
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        rvCommonShares.setLayoutManager(linearLayoutManager);
+        rvCommonShares.addItemDecoration(new HorizontalDividerItemDecoration
+                .Builder(getContext())
+                .drawable(R.drawable.shape_common_divider)
+                .size(10)
+                .build()
+        );
+        rvCommonShares.setAdapter(commonShareAdapter);
+        getPresenter().refreshData();
     }
 
-    public void showShareList(ArrayList<Share> shareList){
-        LogUtil.e("进入showShareList");
-        LogUtil.e(shareList.get(0).getTitle());
-        commonShareAdapter=new CommonShareAdapter(shareList,getActivity());
-        rvCommonShares.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvCommonShares.setAdapter(commonShareAdapter);
+    public ArrayList<CommonShare> getCommonShareList() {
+        return commonShareList;
+    }
+
+    public void refreshData() {
+        srlRefreshCommonShare.setRefreshing(false);
+        commonShareAdapter.notifyDataSetChanged();
+    }
+
+    public void showSnackBar(String text){
+        SnackBarUtil.showText(flCommonShare,text);
     }
 }

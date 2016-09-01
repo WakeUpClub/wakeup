@@ -11,8 +11,6 @@ public class GlobalConstant {
 
     public static String FLAG="flag";
 
-    public static int USER_CENTER=1;
-
     public static String TOKEN="token";
 
     public static String ERROR_MESSAGE="床君累崩溃了，累觉不爱";

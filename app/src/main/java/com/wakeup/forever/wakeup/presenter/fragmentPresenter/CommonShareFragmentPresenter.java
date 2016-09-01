@@ -1,9 +1,11 @@
 package com.wakeup.forever.wakeup.presenter.fragmentPresenter;
 
 import com.jude.beam.expansion.BeamBasePresenter;
+import com.wakeup.forever.wakeup.base.BaseSubscriber;
 import com.wakeup.forever.wakeup.model.DataManager.ShareDataManager;
+import com.wakeup.forever.wakeup.model.bean.CommonShare;
 import com.wakeup.forever.wakeup.model.bean.HttpResult;
-import com.wakeup.forever.wakeup.model.bean.Share;
+import com.wakeup.forever.wakeup.utils.LogUtil;
 import com.wakeup.forever.wakeup.utils.ToastUtil;
 import com.wakeup.forever.wakeup.view.fragment.CommonShareFragment;
 
@@ -11,16 +13,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import rx.Subscriber;
-
 /**
  * Created by forever on 2016/8/26.
  */
 public class CommonShareFragmentPresenter extends BeamBasePresenter<CommonShareFragment> {
 
-    public void initData(){
-        Map<String,Object> query=new HashMap<String, Object>();
-        ShareDataManager.getInstance().getShare(query, new Subscriber<HttpResult<ArrayList<Share>>>() {
+    public void refreshData(){
+        Map<String,Object> requestMap=new HashMap<String, Object>();
+        requestMap.put("limit",5);
+        ShareDataManager.getInstance().getCommonShare(requestMap, new BaseSubscriber<HttpResult<ArrayList<CommonShare>>>(getView().getContext()) {
+            @Override
+            public void onSuccess(HttpResult<ArrayList<CommonShare>> arrayListHttpResult) {
+                ArrayList<CommonShare> commonShares=arrayListHttpResult.getData();
+                getView().getCommonShareList().clear();
+                getView().getCommonShareList().addAll(commonShares);
+                getView().refreshData();
+            }
+
             @Override
             public void onCompleted() {
 
@@ -28,17 +37,36 @@ public class CommonShareFragmentPresenter extends BeamBasePresenter<CommonShareF
 
             @Override
             public void onError(Throwable e) {
-                ToastUtil.showText(e.getMessage());
-            }
-
-            @Override
-            public void onNext(HttpResult<ArrayList<Share>> arrayListHttpResult) {
-                if(arrayListHttpResult.getResultCode()==200){
-                    getView().showShareList(arrayListHttpResult.getData());
-                }
-                ToastUtil.showText(arrayListHttpResult.getMessage());
+                LogUtil.e(e.getMessage()+"納尼");
             }
         });
     }
 
+    public void loadMore(){
+        Map<String,Object> requestMap=new HashMap<String, Object>();
+        requestMap.put("limit",5);
+        requestMap.put("offset",getView().getCommonShareList().size());
+        ShareDataManager.getInstance().getCommonShare(requestMap, new BaseSubscriber<HttpResult<ArrayList<CommonShare>>>(getView().getContext()) {
+            @Override
+            public void onSuccess(HttpResult<ArrayList<CommonShare>> arrayListHttpResult) {
+                ArrayList<CommonShare> commonShares=arrayListHttpResult.getData();
+                if(commonShares.size()==0){
+                    ToastUtil.showText("没有更多了，亲");
+                    return;
+                }
+                getView().getCommonShareList().addAll(commonShares);
+                getView().refreshData();
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LogUtil.e(e.getMessage()+"納尼");
+            }
+        });
+    }
 }

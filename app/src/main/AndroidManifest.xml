@@ -46,7 +46,12 @@
         <activity android:name=".view.activity.MainActivity" />
         <activity android:name=".view.activity.LoginActivity" />
         <activity android:name=".view.activity.RegisterActivity" />
-        <activity android:name=".view.activity.HomeDetailActivity"></activity>
+        <activity android:name=".view.activity.HomeDetailActivity" />
+        <activity android:name=".view.activity.PublishCommonShareActivity" />
+        <activity
+            android:name=".view.activity.ShareDetailActivity"
+            android:label="@string/title_activity_share_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

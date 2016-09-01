@@ -46,7 +46,6 @@ public class LoginActivityPresenter extends BeamBasePresenter<LoginActivity> {
                 if(userHttpResult.getResultCode()==200){
                     loginActivity.showSnackBar("登陆成功");
                     PrefUtils.setString(loginActivity, GlobalConstant.TOKEN,userHttpResult.getData().getToken());
-                    Log.e("zs",userHttpResult.getData().getToken());
                     try {
                         UserCacheManager.saveUser(userHttpResult.getData());
                     }

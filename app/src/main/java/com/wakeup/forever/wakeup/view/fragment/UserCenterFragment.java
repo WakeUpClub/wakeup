@@ -4,6 +4,7 @@ package com.wakeup.forever.wakeup.view.fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,9 +27,11 @@ import com.wakeup.forever.wakeup.R;
 import com.wakeup.forever.wakeup.config.GlobalConstant;
 import com.wakeup.forever.wakeup.model.bean.User;
 import com.wakeup.forever.wakeup.presenter.fragmentPresenter.UserCenterFragmentPresenter;
+import com.wakeup.forever.wakeup.utils.LogUtil;
 import com.wakeup.forever.wakeup.utils.SnackBarUtil;
 import com.wakeup.forever.wakeup.widget.CircleImageView;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -79,8 +82,7 @@ public class UserCenterFragment extends BeamFragment<UserCenterFragmentPresenter
     private DatePicker datePicker;
     //实时获取datePicker的值
     private Calendar calendar=Calendar.getInstance();
-
-    private SimpleDateFormat myFmt=new SimpleDateFormat("yyyy年MM月dd日");;
+    private SimpleDateFormat myFmt=new SimpleDateFormat("yyyy年MM月dd日");
 
 
     public UserCenterFragment() {
@@ -94,7 +96,13 @@ public class UserCenterFragment extends BeamFragment<UserCenterFragmentPresenter
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_center, container, false);
         ButterKnife.bind(this, view);
+
         return view;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -115,6 +123,7 @@ public class UserCenterFragment extends BeamFragment<UserCenterFragmentPresenter
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         userCenterFragmentPresenter = getPresenter();
+
     }
 
     private void initView() {
@@ -187,7 +196,7 @@ public class UserCenterFragment extends BeamFragment<UserCenterFragmentPresenter
                                     showSnackBar("请输入'男'或'女'");
                                 }
                                 else {
-                                    tvCampus.setText(inputUserMessage.getText().toString());
+                                    tvSex.setText(inputUserMessage.getText().toString());
                                     User user = new User();
                                     user.setSex(inputUserMessage.getText().toString());
                                     userCenterFragmentPresenter.updateUserInfo(user);
@@ -340,5 +349,20 @@ public class UserCenterFragment extends BeamFragment<UserCenterFragmentPresenter
                 })
                 .setIcon(R.drawable.logo);
         return builder;
+    }
+
+    public void showImageFromFile(File file){
+        if(file.exists()){
+            LogUtil.e(file.getName());
+            Glide.with(getActivity())
+                    .load("file://"+file.getAbsolutePath())
+                    .crossFade()
+                    .error(R.drawable.head)
+                    .into(cimHead);
+        }
+    }
+
+    public void showHeadImageFromBitmap(Bitmap bitmap){
+        cimHead.setImageBitmap(bitmap);
     }
 }

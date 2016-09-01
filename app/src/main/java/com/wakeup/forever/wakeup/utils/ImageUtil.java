@@ -2,7 +2,6 @@ package com.wakeup.forever.wakeup.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -10,26 +9,64 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Created by forever on 2016/8/25.
  */
 public class ImageUtil {
-    public static File saveBitmapFile(Bitmap bitmap){
-        File file=new File(Environment.getExternalStorageDirectory(),"tempFile.jpeg");//将要保存图片的路径
-        try {
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-            bos.flush();
-            bos.close();
-            return file;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return file;
+    public static void  saveBitmapFile(final Bitmap bitmap, final File file){
+        final Random random=new Random();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                    bos.flush();
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
     }
 
-    public static Bitmap getImage(String srcPath) {
+
+    public static void saveCompressBitmapFile(final Bitmap bitmap, final File file){
+        final Random random=new Random();
+                try {
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                    bos.flush();
+                    bos.close();
+                    saveBitmapFile(getImage(file.getAbsolutePath(),30),file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+    }
+
+    public static void saveCommonCompressBitmapFile(final Bitmap bitmap, final File file){
+        final Random random=new Random();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                    bos.flush();
+                    bos.close();
+                    saveBitmapFile(getImage(file.getAbsolutePath(),100),file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+    public static Bitmap getImage(String srcPath,int maxOption) {
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         //开始读入图片，此时把options.inJustDecodeBounds 设回true了
         newOpts.inJustDecodeBounds = true;
@@ -54,15 +91,14 @@ public class ImageUtil {
         newOpts.inSampleSize = be;//设置缩放比例
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
-        return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
+        return compressImage(bitmap,maxOption);//压缩好比例大小后再进行质量压缩
     }
 
-    public static Bitmap compressImage(Bitmap image) {
+    public static Bitmap compressImage(Bitmap image,int options) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         //质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        int options = 30;
         //循环判断如果压缩后图片是否大于100kb,大于继续压缩
         while ( baos.toByteArray().length / 1024>100) {
             //重置baos即清空baos
@@ -77,4 +113,5 @@ public class ImageUtil {
         Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);
         return bitmap;
     }
+
 }

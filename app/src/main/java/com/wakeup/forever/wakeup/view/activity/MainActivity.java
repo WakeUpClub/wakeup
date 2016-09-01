@@ -63,25 +63,37 @@ public class MainActivity extends BeamBaseActivity<MainActivityPresenter> {
         homeFragment=new HomeFragment();
 
         FragmentTransaction transaction=fragmentManager.beginTransaction();
-        transaction.replace(R.id.fl_main,mainFragment);
+        transaction.add(R.id.fl_main,mainFragment);
+        transaction.add(R.id.fl_main,updateFragment);
+        transaction.add(R.id.fl_main,homeFragment);
+        hideAll(transaction);
+        transaction.show(mainFragment);
         transaction.commit();
 
         rgMenuList.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 FragmentTransaction transaction=fragmentManager.beginTransaction();
+                hideAll(transaction);
                 if(checkedId==rbMain.getId()){
-                    transaction.replace(R.id.fl_main,mainFragment);
+                    transaction.show(mainFragment);
                 }
                 else if(checkedId==rbHome.getId()){
-                    transaction.replace(R.id.fl_main,homeFragment);
+                    transaction.show(homeFragment);
                 }
                 else{
-                    transaction.replace(R.id.fl_main,updateFragment);
+                    transaction.show(updateFragment);
                 }
                 transaction.commit();
             }
         });
     }
+
+    public void hideAll(FragmentTransaction transaction){
+        transaction.hide(mainFragment);
+        transaction.hide(updateFragment);
+        transaction.hide(homeFragment);
+    }
+
 
 }

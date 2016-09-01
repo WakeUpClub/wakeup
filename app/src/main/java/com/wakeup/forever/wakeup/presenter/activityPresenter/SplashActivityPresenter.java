@@ -37,6 +37,7 @@ public class SplashActivityPresenter extends Presenter<SplashActivity>{
 
             @Override
             public void onError(Throwable e) {
+                getView().startMainActivity();
                 Log.e("zs","失败");
             }
 

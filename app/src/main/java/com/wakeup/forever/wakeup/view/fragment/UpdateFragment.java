@@ -37,13 +37,15 @@ public class UpdateFragment extends BeamFragment<UpdateFragmentPresenter> {
 
     private ArrayList<Fragment> fragments;
     private ArrayList<String> titles;
-    private CommonShareFragment commonShareFragment;
     private OfficialShareFragment officialShareFragment;
+    private CommonShareFragment commonShareFragment;
     private FragmentManager fragmentManager;
     private SharePagerAdapter sharePagerAdapter;
 
     public UpdateFragment() {
         // Required empty public constructor
+        officialShareFragment=new OfficialShareFragment();
+        commonShareFragment =new CommonShareFragment();
     }
 
 
@@ -66,12 +68,26 @@ public class UpdateFragment extends BeamFragment<UpdateFragmentPresenter> {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        //commonShareFragment.start();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void initView() {
         fragments=new ArrayList<Fragment>();
-        commonShareFragment=new CommonShareFragment();
-        officialShareFragment=new OfficialShareFragment();
+
+
+
         fragments.add(commonShareFragment);
         fragments.add(officialShareFragment);
         fragmentManager=getActivity().getSupportFragmentManager();
@@ -79,6 +95,7 @@ public class UpdateFragment extends BeamFragment<UpdateFragmentPresenter> {
         titles=new ArrayList<String>();
         titles.add("动态");
         titles.add("官方通知");
+
 
         tlShare.setTabMode(TabLayout.MODE_FIXED);
 

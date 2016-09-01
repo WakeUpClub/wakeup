@@ -33,6 +33,10 @@
     -->
     <list>
         <mapping class="com.wakeup.forever.wakeup.model.bean.User"></mapping>
+        <mapping class="com.wakeup.forever.wakeup.model.bean.Share"></mapping>
+        <mapping class="com.wakeup.forever.wakeup.model.bean.CommonShare"></mapping>
+        <mapping class="com.wakeup.forever.wakeup.model.bean.CommonShareComment"></mapping>
+        <mapping class="com.wakeup.forever.wakeup.model.bean.CommonShareLike"></mapping>
     </list>
 
 </litepal>

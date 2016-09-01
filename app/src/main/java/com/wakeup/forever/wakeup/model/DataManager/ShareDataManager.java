@@ -1,8 +1,14 @@
 package com.wakeup.forever.wakeup.model.DataManager;
 
+import com.squareup.okhttp.RequestBody;
+import com.wakeup.forever.wakeup.app.App;
+import com.wakeup.forever.wakeup.base.BaseSubscriber;
+import com.wakeup.forever.wakeup.config.GlobalConstant;
+import com.wakeup.forever.wakeup.model.bean.CommonShare;
 import com.wakeup.forever.wakeup.model.bean.HttpResult;
 import com.wakeup.forever.wakeup.model.bean.Share;
 import com.wakeup.forever.wakeup.model.service.ShareService;
+import com.wakeup.forever.wakeup.utils.PrefUtils;
 import com.wakeup.forever.wakeup.utils.RetrofitUtil;
 
 import java.util.ArrayList;
@@ -36,6 +42,26 @@ public class ShareDataManager {
 
     public void getShare(Map<String,Object> query, Subscriber<HttpResult<ArrayList<Share>>> subscriber){
         shareService.getShare(query)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void getCommonShare(Map<String,Object> query, BaseSubscriber<HttpResult<ArrayList<CommonShare>>> subscriber){
+        String token= PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN,"");
+        shareService.getCommonShare(token,query)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void publishCommonShare(Map<String,Object> query, RequestBody image, BaseSubscriber<HttpResult<ArrayList<String>>> subscriber){
+
+        String token= PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN,"");
+        query.put("token",token);
+        shareService.publishCommonShare(query,image)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
