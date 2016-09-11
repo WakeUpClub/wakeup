@@ -1,0 +1,17 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.wakeup.forever.wakeup.view.fragment.SettingFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <Button
+        android:id="@+id/btn_quitLogin"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="退出登陆"
+        android:background="@drawable/shape_rec_boder"
+        android:layout_centerHorizontal="true"
+        />
+
+</RelativeLayout>

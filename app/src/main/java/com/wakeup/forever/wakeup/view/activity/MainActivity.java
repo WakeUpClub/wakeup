@@ -1,7 +1,9 @@
 package com.wakeup.forever.wakeup.view.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -15,9 +17,13 @@ import com.jude.beam.expansion.BeamBaseActivity;
 import com.wakeup.forever.wakeup.R;
 import com.wakeup.forever.wakeup.model.DataManager.ActivityManager;
 import com.wakeup.forever.wakeup.presenter.activityPresenter.MainActivityPresenter;
+import com.wakeup.forever.wakeup.utils.LogUtil;
+import com.wakeup.forever.wakeup.utils.ToastUtil;
 import com.wakeup.forever.wakeup.view.fragment.HomeFragment;
 import com.wakeup.forever.wakeup.view.fragment.MainFragment;
 import com.wakeup.forever.wakeup.view.fragment.UpdateFragment;
+
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,8 +51,11 @@ public class MainActivity extends BeamBaseActivity<MainActivityPresenter> {
     private HomeFragment homeFragment;
     private UpdateFragment updateFragment;
 
+    private long lastPressBackTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LogUtil.e("onCreate");
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         ActivityManager.addActivity(this);
         super.onCreate(savedInstanceState);
@@ -57,6 +66,7 @@ public class MainActivity extends BeamBaseActivity<MainActivityPresenter> {
     }
 
     public void initView(){
+        LogUtil.e("initView");
         //初始化fragment
         mainFragment=new MainFragment();
         updateFragment=new UpdateFragment();
@@ -95,5 +105,35 @@ public class MainActivity extends BeamBaseActivity<MainActivityPresenter> {
         transaction.hide(homeFragment);
     }
 
+    @Override
+    public void onBackPressed() {
+        long pressTime = new Date().getTime() / 1000;
+        if (pressTime - lastPressBackTime < 2) {
+            super.onBackPressed();
+        } else {
+            lastPressBackTime = pressTime;
+            ToastUtil.showText("再点一次退出");
+        }
+    }
 
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        LogUtil.e(fragment.toString());
+        if(mainFragment==null&&fragment instanceof MainFragment){
+            mainFragment= (MainFragment) fragment;
+        }
+        else if(updateFragment==null&&fragment instanceof UpdateFragment){
+            updateFragment= (UpdateFragment) fragment;
+        }
+        else if(homeFragment==null&&fragment instanceof HomeFragment){
+            homeFragment= (HomeFragment) fragment;
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+       // super.onSaveInstanceState(outState);
+        LogUtil.e("onSaveInstanceState");
+    }
 }

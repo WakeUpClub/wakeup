@@ -3,8 +3,11 @@ package com.wakeup.forever.wakeup.base;
 import android.content.Context;
 import android.content.Intent;
 
+import com.wakeup.forever.wakeup.app.App;
+import com.wakeup.forever.wakeup.config.GlobalConstant;
 import com.wakeup.forever.wakeup.model.DataManager.ActivityManager;
 import com.wakeup.forever.wakeup.model.bean.HttpResult;
+import com.wakeup.forever.wakeup.utils.PrefUtils;
 import com.wakeup.forever.wakeup.utils.ToastUtil;
 import com.wakeup.forever.wakeup.view.activity.LoginActivity;
 
@@ -27,6 +30,10 @@ public abstract class BaseSubscriber<T extends HttpResult> extends Subscriber<T>
     @Override
     public void onNext(T t) {
         if(t.getResultCode()==401){
+            String token= PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN,"");
+            if(token.isEmpty()){
+                ToastUtil.showText("请先登陆才能体验哦");
+            }
             tokenIsInvalid();
         }
         else{

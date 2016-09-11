@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import com.jude.beam.expansion.BeamBasePresenter;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
+import com.wakeup.forever.wakeup.app.App;
 import com.wakeup.forever.wakeup.base.BaseSubscriber;
 import com.wakeup.forever.wakeup.config.GlobalConstant;
 import com.wakeup.forever.wakeup.model.DataManager.UserCacheManager;
@@ -18,10 +19,9 @@ import com.wakeup.forever.wakeup.model.bean.User;
 import com.wakeup.forever.wakeup.utils.GetImageFragmentUtil;
 import com.wakeup.forever.wakeup.utils.GetImageUtils;
 import com.wakeup.forever.wakeup.utils.LogUtil;
+import com.wakeup.forever.wakeup.utils.PrefUtils;
 import com.wakeup.forever.wakeup.utils.ToastUtil;
 import com.wakeup.forever.wakeup.view.fragment.UserCenterFragment;
-
-import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.util.HashMap;
@@ -47,7 +47,8 @@ public class UserCenterFragmentPresenter extends BeamBasePresenter<UserCenterFra
         /*
             从数据库里面拿到用户信息缓存
          */
-        User user = UserCacheManager.getUser();
+        String token= PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN,"");
+        final User user = UserCacheManager.getInstance(getView().getContext()).getUser();
         if (user != null) {
             userCenterFragment.showUserInfo(user);
         }
@@ -57,11 +58,7 @@ public class UserCenterFragmentPresenter extends BeamBasePresenter<UserCenterFra
             public void onSuccess(HttpResult<User> userHttpResult) {
                 if (userHttpResult.getResultCode() == 200) {
                     userCenterFragment.showUserInfo(userHttpResult.getData());
-                    if (DataSupport.findFirst(User.class) != null) {
-                        userHttpResult.getData().update(1);
-                    } else {
-                        userHttpResult.getData().saveThrows();
-                    }
+                    UserCacheManager.getInstance(getView().getContext()).updateUser(userHttpResult.getData());
                 } else {
                     ToastUtil.showText("未知错误");
                 }

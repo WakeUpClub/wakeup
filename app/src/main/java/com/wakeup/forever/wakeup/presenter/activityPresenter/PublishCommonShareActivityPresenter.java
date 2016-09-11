@@ -14,11 +14,11 @@ import com.jude.beam.expansion.BeamBasePresenter;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 import com.wakeup.forever.wakeup.base.BaseSubscriber;
+import com.wakeup.forever.wakeup.config.GlobalConstant;
 import com.wakeup.forever.wakeup.model.DataManager.ShareDataManager;
 import com.wakeup.forever.wakeup.model.bean.HttpResult;
 import com.wakeup.forever.wakeup.utils.GetImageUtils;
 import com.wakeup.forever.wakeup.utils.ImageUtil;
-import com.wakeup.forever.wakeup.utils.LogUtil;
 import com.wakeup.forever.wakeup.utils.ToastUtil;
 import com.wakeup.forever.wakeup.view.activity.PublishCommonShareActivity;
 
@@ -75,6 +75,7 @@ public class PublishCommonShareActivityPresenter extends BeamBasePresenter<Publi
         }
     }
     public  void publishCommonShare() {
+        getView().showProgressDialog();
         if(tempFile==null){
             ToastUtil.showText("请先选择图片");
             getView().showSnackBar("请先选择图片");
@@ -86,11 +87,13 @@ public class PublishCommonShareActivityPresenter extends BeamBasePresenter<Publi
             ShareDataManager.getInstance().publishCommonShare(queryMap, image, new BaseSubscriber<HttpResult<ArrayList<String>>>(getView()) {
                 @Override
                 public void onSuccess(HttpResult<ArrayList<String>> arrayListHttpResult) {
+                    getView().dismissProgressDialog();
                     if(arrayListHttpResult.getResultCode()==200){
-                        LogUtil.e("发送成功");
+                        ToastUtil.showText("发送成功");
+                        getView().finish();
                     }
                     else{
-                        LogUtil.e(arrayListHttpResult.getMessage());
+                        ToastUtil.showText(arrayListHttpResult.getMessage());
                     }
                 }
 
@@ -101,7 +104,7 @@ public class PublishCommonShareActivityPresenter extends BeamBasePresenter<Publi
 
                 @Override
                 public void onError(Throwable e) {
-                    LogUtil.e(e.getMessage());
+                    ToastUtil.showText(GlobalConstant.ERROR_MESSAGE);
                 }
             });
         }

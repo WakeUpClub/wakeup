@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
@@ -39,7 +38,6 @@ public class GetImageUtils {
                     break;
                 case 1:
                     // 调用相册
-                    Log.e("zs","相册");
                     startPick(dialog);
                     break;
 

@@ -8,6 +8,9 @@
     <color name="bitGray">#eeeeee</color>
     <color name="Aqua">#00ffff</color>
     <color name="mainColor">#2196F3</color>
-    <color name="trmainColor">#772196F3</color>
     <color name="black">#000000</color>
+    <color name="grayBlue">#3F51B5</color>
+    <color name="backgroud">#CCFFFF</color>
+    <color name="circleButtonColor">#CAE1FF</color>
+    <color name="trmainColor">#772196F3</color>
 </resources>

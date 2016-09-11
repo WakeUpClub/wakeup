@@ -1,24 +1,76 @@
 package com.wakeup.forever.wakeup.model.DataManager;
 
-import com.wakeup.forever.wakeup.model.bean.User;
+import android.content.Context;
 
-import org.litepal.crud.DataSupport;
+import com.j256.ormlite.dao.Dao;
+import com.wakeup.forever.wakeup.app.App;
+import com.wakeup.forever.wakeup.config.GlobalConstant;
+import com.wakeup.forever.wakeup.model.bean.User;
+import com.wakeup.forever.wakeup.model.helper.DatabaseHelper;
+import com.wakeup.forever.wakeup.utils.LogUtil;
+import com.wakeup.forever.wakeup.utils.PrefUtils;
+
+import java.sql.SQLException;
 
 /**
  * Created by forever on 2016/8/26.
  */
 public class UserCacheManager {
 
-    public static User getUser(){
-       return  DataSupport.findFirst(User.class);
+    private Context context;
+    private Dao<User, Integer> userDao;
+    private DatabaseHelper helper;
+    private static UserCacheManager userCacheManager;
+
+    public UserCacheManager(Context context) {
+        this.context = context;
+        helper = DatabaseHelper.getHelper(context);
+        try {
+            userDao = helper.getDao(User.class);
+        } catch (SQLException e) {
+            LogUtil.e(e.getMessage());
+        }
     }
 
-   public  static void saveUser(User user){
-       if(DataSupport.findFirst(User.class)!=null){
-           user.update(1);    //用户信息只存一条
-       }
-       else{
-           user.saveThrows();
-       }
-   }
+    public static UserCacheManager getInstance(Context context) {
+        if (userCacheManager == null) {
+            userCacheManager = new UserCacheManager(context);
+        }
+        return userCacheManager;
+    }
+
+    public User getUser() {
+        String token = PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN, "");
+        User user = null;
+        try {
+            user = userDao.queryBuilder().where().eq("token", token).queryForFirst();
+        } catch (SQLException e) {
+            LogUtil.e(e.getMessage());
+        }
+        if (user == null) {
+            user = new User();
+        }
+        LogUtil.e(user.toString());
+        return user;
+    }
+
+    public void saveUser(User user) {
+        try {
+            userDao.queryRaw("delete from tb_user");
+            userDao.create(user);
+        } catch (SQLException e) {
+            LogUtil.e(e.getMessage());
+        }
+    }
+
+    public void updateUser(User user) {
+        String token = PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN, "");
+        try {
+            user.setToken(token);
+            userDao.update(user);
+            LogUtil.e(user.toString());
+        } catch (SQLException e) {
+            LogUtil.e(e.getMessage());
+        }
+    }
 }

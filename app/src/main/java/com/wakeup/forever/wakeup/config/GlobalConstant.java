@@ -9,6 +9,8 @@ public class GlobalConstant {
 
     public static String SmsSecret="a054d9f00d464f748bebaf20e46e5aa2";
 
+    public static final String WECHAT_APP_ID = "1105648886";
+
     public static String FLAG="flag";
 
     public static String TOKEN="token";

@@ -48,6 +48,16 @@
                 android:hint="Password"/>
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:id="@+id/tv_find"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="找回密码"
+            android:layout_gravity="right"
+            android:textColor="@color/white"
+            android:clickable="true"
+            />
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_login"
             android:layout_width="fill_parent"

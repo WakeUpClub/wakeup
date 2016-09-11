@@ -1,14 +1,27 @@
 package com.wakeup.forever.wakeup.view.viewholder;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.wakeup.forever.wakeup.R;
+import com.wakeup.forever.wakeup.model.bean.CommonShare;
+import com.wakeup.forever.wakeup.model.bean.CommonShareComment;
+import com.wakeup.forever.wakeup.model.bean.CommonShareLike;
 import com.wakeup.forever.wakeup.widget.CircleImageView;
+
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,10 +58,69 @@ public class CommonShareHolder extends RecyclerView.ViewHolder {
     ImageView ivImageDesc;
     @Bind(R.id.iv_comment)
     ImageView ivComment;
+    @Bind(R.id.ll_comment)
+    public LinearLayout llComment;
 
-    public CommonShareHolder(View itemView) {
+    public EditText etComment;
+    public Button btnSure;
+    public Button btnCancel;
+    public View view;
+
+
+    public CommonShareHolder(View itemView, Context context) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        //R.layout.layout_common_share_item;
+        view = LayoutInflater.from(context).inflate(R.layout.dialog_comment, null, false);
+        etComment = (EditText) view.findViewById(R.id.input_comment);
+        btnSure = (Button) view.findViewById(R.id.btn_sure);
+        btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+    }
+
+    public void setData(CommonShare commonShare, Context context) {
+
+        Glide.with(context)
+                .load(commonShare.getUser().getHeadURL())
+                .error(R.drawable.head)
+                .crossFade()
+                .into(civAuthorImage);
+        tvAuthorName.setText(commonShare.getUser().getName());
+        tvPublishTime.setText(new Date(commonShare.getPublishTime()).toLocaleString());
+        tvContent.setText(commonShare.getContent());
+        Glide.with(context)
+                .load(commonShare.getImageDesc())
+                .placeholder(R.drawable.splash01)
+                .error(R.drawable.splash01)
+                .crossFade()
+                .into(ivImageDesc);
+        tvShareViewedCount.setText(commonShare.getViewCount() + "");
+        StringBuffer likeUser = new StringBuffer();
+        for (CommonShareLike commonShareLike : commonShare.getLikedList()) {
+            likeUser.append(commonShareLike.getUserName() + ",");
+        }
+        if (likeUser.length() != 0) {
+            likeUser.deleteCharAt(likeUser.length() - 1);
+        }
+        likeUser.append("等人覺得很贊");
+        tvLikeUser.setText("　　　" + likeUser);
+        if (commonShare.getFavourite()) {
+            ivShareLiked.setImageResource(R.drawable.favourite_full);
+        } else {
+            ivShareLiked.setImageResource(R.drawable.favourite);
+        }
+        llComment.removeAllViews();
+        for (CommonShareComment commonShareComment : commonShare.getCommentList()) {
+            TextView textView = new TextView(context);
+            String name = commonShareComment.getUserName();
+            String comment = commonShareComment.getComment();
+            ForegroundColorSpan colorSpan = new ForegroundColorSpan(context.getResources().getColor(R.color.mainColor));
+            SpannableString spannableString = new SpannableString(name + ":　" + comment);
+            if (name != null) {
+                spannableString.setSpan(colorSpan, 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+            textView.setText(spannableString);
+            llComment.addView(textView);
+        }
     }
 
     public CircleImageView getCivAuthorImage() {

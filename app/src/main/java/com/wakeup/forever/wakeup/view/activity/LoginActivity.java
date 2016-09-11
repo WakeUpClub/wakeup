@@ -35,9 +35,12 @@ public class LoginActivity extends BeamBaseActivity<LoginActivityPresenter> {
     AppCompatButton btn_login;
     @Bind(R.id.tv_signUp)
     TextView tvSignUp;
+    @Bind(R.id.tv_find)
+    TextView tvFind;
 
     LoginActivityPresenter loginActivityPresenter;
     ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +71,22 @@ public class LoginActivity extends BeamBaseActivity<LoginActivityPresenter> {
                 String password = inputPassword.getText().toString();
                 if (phone.isEmpty() || password.isEmpty()) {
                     showSnackBar("用户名或密码不能为空");
-                }
-                else{
+                } else {
                     loginActivityPresenter.login(phone, password);
                 }
+            }
+        });
+        tvFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this,FindPasswordActivity.class));
+                finish();
             }
         });
     }
 
     public void showProgressDialog() {
-        progressDialog = new ProgressDialog(this,R.style.AppTheme_Dark_Dialog);
+        progressDialog = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("登陆中...");
         progressDialog.show();
@@ -87,8 +96,8 @@ public class LoginActivity extends BeamBaseActivity<LoginActivityPresenter> {
         progressDialog.dismiss();
     }
 
-    public void showSnackBar(String text){
-        Snackbar.make(llLogin,text,Snackbar.LENGTH_SHORT)
+    public void showSnackBar(String text) {
+        Snackbar.make(llLogin, text, Snackbar.LENGTH_SHORT)
                 .setAction("好的", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -99,8 +108,8 @@ public class LoginActivity extends BeamBaseActivity<LoginActivityPresenter> {
                 .show();
     }
 
-    public void loginSuccess(){
-        startActivity(new Intent(this,MainActivity.class));
+    public void loginSuccess() {
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 

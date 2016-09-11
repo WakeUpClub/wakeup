@@ -1,32 +1,35 @@
 package com.wakeup.forever.wakeup.model.bean;
 
-import org.litepal.crud.DataSupport;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
-public class Share extends DataSupport {
+@DatabaseTable(tableName = "tb_share")
+public class Share {
+
 
 	public Share() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	private Integer id;
-	
+	@DatabaseField(columnName = "id" ,unique = true,id = true)
+	private int id;
+	@DatabaseField(columnName = "author_phone")
 	private String authorPhone;
-	
+	@DatabaseField(columnName = "view_count")
 	private Integer viewCount;
-	
+	@DatabaseField(columnName = "likeCount")
 	private Integer likeCount;
-	
+	@DatabaseField(columnName = "image_link")
 	private String imageLink;
-
+	@DatabaseField(columnName = "author_name")
 	private String authorName;
-	
+	@DatabaseField(columnName = "title")
 	private String title;
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

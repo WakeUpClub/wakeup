@@ -20,7 +20,7 @@ import rx.Subscriber;
 public class OfficialShareFragmentPresenter extends BeamBasePresenter<OfficialShareFragment> {
 
     public void initData(){
-        ArrayList<Share> shareList=ShareCacheManager.getLastShareList();
+        ArrayList<Share> shareList=ShareCacheManager.getInstance(getView().getContext()).getLastShareList();
         if(shareList.size()==10){
             getView().getShareList().clear();
             getView().getShareList().addAll(shareList);
@@ -52,7 +52,7 @@ public class OfficialShareFragmentPresenter extends BeamBasePresenter<OfficialSh
                     getView().getShareList().clear();
                     getView().getShareList().addAll(arrayListHttpResult.getData());
                     getView().showShareList();
-                    ShareCacheManager.saveShareList(arrayListHttpResult.getData());
+                    ShareCacheManager.getInstance(getView().getContext()).saveShareList(arrayListHttpResult.getData());
                 }
                 else {
                     ToastUtil.showText("网络出了点问题呢");

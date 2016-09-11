@@ -20,8 +20,11 @@ import com.wakeup.forever.wakeup.config.GlobalConstant;
 import com.wakeup.forever.wakeup.model.bean.User;
 import com.wakeup.forever.wakeup.presenter.fragmentPresenter.HomeFragmentPresenter;
 import com.wakeup.forever.wakeup.utils.SnackBarUtil;
+import com.wakeup.forever.wakeup.utils.ToastUtil;
+import com.wakeup.forever.wakeup.view.activity.CalendarActivity;
 import com.wakeup.forever.wakeup.view.activity.HomeDetailActivity;
 import com.wakeup.forever.wakeup.view.activity.LoginActivity;
+import com.wakeup.forever.wakeup.view.activity.RunTraceActivity;
 import com.wakeup.forever.wakeup.widget.CircleImageView;
 
 import butterknife.Bind;
@@ -33,10 +36,6 @@ import butterknife.ButterKnife;
 @RequiresPresenter(HomeFragmentPresenter.class)
 public class HomeFragment extends BeamFragment<HomeFragmentPresenter> {
 
-    /*
-           绑定的view
-           @forever
-     */
     @Bind(R.id.civ_head)
     CircleImageView civHead;
     @Bind(R.id.tv_grade)
@@ -77,7 +76,7 @@ public class HomeFragment extends BeamFragment<HomeFragmentPresenter> {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
+
     public void onStart() {
         super.onStart();
 
@@ -96,6 +95,7 @@ public class HomeFragment extends BeamFragment<HomeFragmentPresenter> {
         civHead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent i = new Intent(getContext(), LoginActivity.class);
                 startActivity(i);
             }
@@ -107,6 +107,45 @@ public class HomeFragment extends BeamFragment<HomeFragmentPresenter> {
                 Intent i = new Intent(getContext(), HomeDetailActivity.class);
                 i.putExtra(GlobalConstant.FLAG, HomeDetailActivity.USER_CENTER);
                 startActivity(i);
+            }
+        });
+
+        rlSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getContext(), CalendarActivity.class);
+                startActivity(i);
+            }
+        });
+
+        rlSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getContext(), HomeDetailActivity.class);
+                i.putExtra(GlobalConstant.FLAG, HomeDetailActivity.SETTING);
+                startActivity(i);
+            }
+        });
+
+        rlPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getContext(), RunTraceActivity.class);
+                startActivity(i);
+            }
+        });
+
+        rlFootMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtil.showText("开发中。。。");
+            }
+        });
+
+        rlAboutUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtil.showText("开发中。。。");
             }
         });
     }

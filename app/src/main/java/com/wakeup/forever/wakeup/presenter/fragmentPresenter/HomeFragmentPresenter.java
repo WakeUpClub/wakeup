@@ -11,10 +11,6 @@ import com.wakeup.forever.wakeup.model.bean.User;
 import com.wakeup.forever.wakeup.utils.PrefUtils;
 import com.wakeup.forever.wakeup.view.fragment.HomeFragment;
 
-import org.litepal.crud.DataSupport;
-
-import java.util.List;
-
 /**
  * Created by forever on 2016/8/17.
  */
@@ -26,11 +22,10 @@ public class HomeFragmentPresenter extends BeamBasePresenter<HomeFragment> {
         if(token.isEmpty()){
             return;
         }
-        User userTemp = UserCacheManager.getUser();
+        User userTemp = UserCacheManager.getInstance(getView().getContext()).getUser();
         if(userTemp!=null){
             getView().showUserInfo(userTemp);
         }
-        List<User> users=DataSupport.findAll(User.class);
         UserDataManager.getInstance().getUserInfo(new BaseSubscriber<HttpResult<User>>(getView().getActivity()) {
             @Override
             public void onSuccess(HttpResult<User> userHttpResult) {
@@ -38,7 +33,7 @@ public class HomeFragmentPresenter extends BeamBasePresenter<HomeFragment> {
                     User user=userHttpResult.getData();
                     getView().showUserInfo(user);
                     getView().setHeadClickable(false);
-                    UserCacheManager.saveUser(userHttpResult.getData());
+                    UserCacheManager.getInstance(getView().getContext()).updateUser(userHttpResult.getData());
                 } else {
                     getView().showSnackBar(GlobalConstant.ERROR_MESSAGE);
                     getView().setHeadClickable(true);

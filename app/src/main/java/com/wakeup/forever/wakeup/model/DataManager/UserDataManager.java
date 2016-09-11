@@ -8,10 +8,12 @@ import com.wakeup.forever.wakeup.base.BaseSubscriber;
 import com.wakeup.forever.wakeup.config.GlobalConstant;
 import com.wakeup.forever.wakeup.model.bean.HttpResult;
 import com.wakeup.forever.wakeup.model.bean.User;
+import com.wakeup.forever.wakeup.model.bean.UserPoint;
 import com.wakeup.forever.wakeup.model.service.UserService;
 import com.wakeup.forever.wakeup.utils.PrefUtils;
 import com.wakeup.forever.wakeup.utils.RetrofitUtil;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import rx.Subscriber;
@@ -86,5 +88,57 @@ public class UserDataManager {
                 .subscribe(subscriber);
 
     }
+
+    public void signIn(BaseSubscriber<HttpResult<String>> subscriber){
+        String token= PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN,"");
+        userService.signIn(token)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void getSignInfo(BaseSubscriber<HttpResult<ArrayList<Long>>> subscriber){
+        String token= PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN,"");
+        userService.getSignInfo(token)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void getSignCount(Subscriber<HttpResult<ArrayList<Long>>> subscriber){
+        String token= PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN,"");
+        userService.getSignInfo(token)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void updatePassword(String phone,String password,Subscriber<HttpResult<User>> subscriber){
+        userService.updatePassword(phone,password)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void monthPointRank(Map<String,Object> queryMap,Subscriber<HttpResult<ArrayList<UserPoint>>> subscriber){
+        userService.monthPointRank(queryMap)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void allPointRank(Map<String,Object> queryMap,Subscriber<HttpResult<ArrayList<UserPoint>>> subscriber){
+        userService.allPointRank(queryMap)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
 
 }

@@ -106,4 +106,15 @@ public class UpdateFragment extends BeamFragment<UpdateFragmentPresenter> {
         vpShare.setAdapter(sharePagerAdapter);
         tlShare.setupWithViewPager(vpShare);
     }
+
+    @Override
+    public void onAttachFragment(Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+        if(officialShareFragment==null&&childFragment instanceof OfficialShareFragment){
+            officialShareFragment= (OfficialShareFragment) childFragment;
+        }
+        else if(commonShareFragment==null&&childFragment instanceof CommonShareFragment){
+            commonShareFragment= (CommonShareFragment) childFragment;
+        }
+    }
 }

@@ -1,20 +1,35 @@
 package com.wakeup.forever.wakeup.model.bean;
 
-import org.litepal.crud.DataSupport;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
-public class User extends DataSupport{
+@DatabaseTable(tableName ="tb_user")
+public class User {
+    @DatabaseField(columnName = "id" ,unique = true,id = true)
     private int id;
+    @DatabaseField(columnName = "password")
     private String password;
+    @DatabaseField(columnName = "name")
     private String name;
+    @DatabaseField(columnName = "phone")
     private String phone;
+    @DatabaseField(columnName = "nick_name")
     private String nickName;
+    @DatabaseField(columnName = "head_url")
     private String headURL;
+    @DatabaseField(columnName = "token")
     private String token;
+    @DatabaseField(columnName = "sex")
     private String sex;
+    @DatabaseField(columnName = "signature")
     private String signature;
+    @DatabaseField(columnName = "accumulate_point")
     private Integer accumulatePoint;
+    @DatabaseField(columnName = "birth")
     private Long birth;
+    @DatabaseField(columnName = "campus")
     private String campus;
+
 
     public User(String password, String phone) {
         // TODO Auto-generated constructor stub
@@ -117,8 +132,14 @@ public class User extends DataSupport{
     public String getCampus() {
         return campus;
     }
+
     public void setCampus(String campus) {
         this.campus = campus;
     }
 
+    @Override
+    public String toString() {
+        String str="id:"+id+"token:"+token+"phone:"+phone;
+        return str;
+    }
 }

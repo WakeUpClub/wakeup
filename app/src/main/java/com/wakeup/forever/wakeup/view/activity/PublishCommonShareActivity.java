@@ -1,5 +1,6 @@
 package com.wakeup.forever.wakeup.view.activity;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +33,7 @@ public class PublishCommonShareActivity extends BeamBaseActivity<PublishCommonSh
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.ib_publish)
-    ImageButton ibPublish;
+    ImageView ibPublish;
     @Bind(R.id.rl_title)
     RelativeLayout rlTitle;
     @Bind(R.id.et_text)
@@ -44,7 +45,7 @@ public class PublishCommonShareActivity extends BeamBaseActivity<PublishCommonSh
     @Bind(R.id.tl_publishCommonShare)
     RelativeLayout tlPublishCommonShare;
 
-
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -104,12 +105,24 @@ public class PublishCommonShareActivity extends BeamBaseActivity<PublishCommonSh
             showSnackBar("请先填写内容");
             return null;
         }
-        queryMap.put("content",content);
+        queryMap.put("content", content);
         return queryMap;
     }
 
-    public void showSnackBar(String text){
-        SnackBarUtil.showText(tlPublishCommonShare,text);
+    public void showSnackBar(String text) {
+        SnackBarUtil.showText(tlPublishCommonShare, text);
     }
+
+    public void showProgressDialog() {
+        progressDialog = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("登陆中...");
+        progressDialog.show();
+    }
+
+    public void dismissProgressDialog() {
+        progressDialog.dismiss();
+    }
+
 
 }

@@ -13,6 +13,7 @@ import com.wakeup.forever.wakeup.R;
 import com.wakeup.forever.wakeup.config.GlobalConstant;
 import com.wakeup.forever.wakeup.model.DataManager.ActivityManager;
 import com.wakeup.forever.wakeup.presenter.activityPresenter.HomeDetailActivityPresenter;
+import com.wakeup.forever.wakeup.view.fragment.SettingFragment;
 import com.wakeup.forever.wakeup.view.fragment.UserCenterFragment;
 
 import butterknife.Bind;
@@ -25,7 +26,7 @@ public class HomeDetailActivity extends BeamBaseActivity<HomeDetailActivityPrese
     FrameLayout flHomeDetail;
 
     public static final int USER_CENTER=1;
-    public  static final int SHARE_DETAIL=2;
+    public  static final int SETTING=2;
 
     private FragmentManager fragmentManager;
     private ProgressDialog progressDialog;
@@ -52,6 +53,9 @@ public class HomeDetailActivity extends BeamBaseActivity<HomeDetailActivityPrese
         switch (flag){
             case USER_CENTER:
                 fragmentTransaction.replace(R.id.fl_homeDetail,new UserCenterFragment());
+                break;
+            case SETTING:
+                fragmentTransaction.replace(R.id.fl_homeDetail,new SettingFragment());
                 break;
             default:
                 break;

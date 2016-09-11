@@ -26,6 +26,12 @@ public interface ShareService {
     @GET("commonShare/getCommonShare.do")
     Observable<HttpResult<ArrayList<CommonShare>>> getCommonShare(@Query("token") String token,@QueryMap Map<String,Object> query);
 
+    @GET("commonShare/favourite.do")
+    Observable<HttpResult<CommonShare>> favourite(@Query("token") String token,@Query("commonShareId") int commonShareId);
+
+    @GET("commonShare/comment.do")
+    Observable<HttpResult<CommonShare>> comment(@QueryMap Map<String,Object> query);
+
     @Multipart
     @POST("commonShare/publishCommonShare.do")
     Observable<HttpResult<ArrayList<String>>> publishCommonShare(@QueryMap Map<String,Object> query,@Part("image"+"\";filename=\""+"image.jpg")RequestBody image);

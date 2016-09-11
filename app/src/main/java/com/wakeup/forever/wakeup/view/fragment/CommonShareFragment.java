@@ -94,7 +94,7 @@ public class CommonShareFragment extends BeamFragment<CommonShareFragmentPresent
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if ((newState == RecyclerView.SCROLL_STATE_IDLE) && (lastVisibleItem + 2 > commonShareList.size())) {
+                if ((newState == RecyclerView.SCROLL_STATE_IDLE) && (lastVisibleItem+1 == commonShareList.size())) {
                     getPresenter().loadMore();
                 }
             }
@@ -109,7 +109,7 @@ public class CommonShareFragment extends BeamFragment<CommonShareFragmentPresent
 
     private void initView() {
         commonShareList = new ArrayList<CommonShare>();
-        commonShareAdapter = new CommonShareAdapter(getContext(), commonShareList);
+        commonShareAdapter = new CommonShareAdapter(this, commonShareList);
         linearLayoutManager = new LinearLayoutManager(getContext());
         rvCommonShares.setLayoutManager(linearLayoutManager);
         rvCommonShares.addItemDecoration(new HorizontalDividerItemDecoration
@@ -119,7 +119,8 @@ public class CommonShareFragment extends BeamFragment<CommonShareFragmentPresent
                 .build()
         );
         rvCommonShares.setAdapter(commonShareAdapter);
-        getPresenter().refreshData();
+        //getPresenter().refreshData();
+        getPresenter().initDataFromCache();
     }
 
     public ArrayList<CommonShare> getCommonShareList() {
