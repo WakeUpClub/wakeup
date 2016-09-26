@@ -1,6 +1,5 @@
 package com.wakeup.forever.wakeup.model.service;
 
-import com.squareup.okhttp.RequestBody;
 import com.wakeup.forever.wakeup.model.bean.CommonShare;
 import com.wakeup.forever.wakeup.model.bean.HttpResult;
 import com.wakeup.forever.wakeup.model.bean.Share;
@@ -8,12 +7,13 @@ import com.wakeup.forever.wakeup.model.bean.Share;
 import java.util.ArrayList;
 import java.util.Map;
 
-import retrofit.http.GET;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.Part;
-import retrofit.http.Query;
-import retrofit.http.QueryMap;
+import okhttp3.RequestBody;
+import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import rx.Observable;
 
 /**
@@ -24,7 +24,7 @@ public interface ShareService {
     Observable<HttpResult<ArrayList<Share>>> getShare(@QueryMap Map<String,Object> query);
 
     @GET("commonShare/getCommonShare.do")
-    Observable<HttpResult<ArrayList<CommonShare>>> getCommonShare(@Query("token") String token,@QueryMap Map<String,Object> query);
+    Observable<HttpResult<ArrayList<CommonShare>>> getCommonShare(@Query("token") String token, @QueryMap Map<String,Object> query);
 
     @GET("commonShare/favourite.do")
     Observable<HttpResult<CommonShare>> favourite(@Query("token") String token,@Query("commonShareId") int commonShareId);
@@ -34,5 +34,5 @@ public interface ShareService {
 
     @Multipart
     @POST("commonShare/publishCommonShare.do")
-    Observable<HttpResult<ArrayList<String>>> publishCommonShare(@QueryMap Map<String,Object> query,@Part("image"+"\";filename=\""+"image.jpg")RequestBody image);
+    Observable<HttpResult<ArrayList<String>>> publishCommonShare(@QueryMap Map<String,Object> query,@Part("image"+"\";filename=\""+"image.jpg") RequestBody image);
 }

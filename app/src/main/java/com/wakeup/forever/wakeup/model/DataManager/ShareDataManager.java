@@ -1,6 +1,5 @@
 package com.wakeup.forever.wakeup.model.DataManager;
 
-import com.squareup.okhttp.RequestBody;
 import com.wakeup.forever.wakeup.app.App;
 import com.wakeup.forever.wakeup.base.BaseSubscriber;
 import com.wakeup.forever.wakeup.config.GlobalConstant;
@@ -15,7 +14,8 @@ import com.wakeup.forever.wakeup.utils.ToastUtil;
 import java.util.ArrayList;
 import java.util.Map;
 
-import retrofit.http.QueryMap;
+import okhttp3.RequestBody;
+import retrofit2.http.QueryMap;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

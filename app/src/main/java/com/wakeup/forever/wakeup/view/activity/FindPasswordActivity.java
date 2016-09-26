@@ -83,14 +83,13 @@ public class FindPasswordActivity extends BeamBaseActivity<FindPasswordActivityP
         btnGetCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                findPasswordActivityPresenter.getCode();
+                findPasswordActivityPresenter.getCode(getInputPhone());
             }
         });
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog();
 
                 if (!CheckUtil.checkPhone(inputPhone.getText().toString())) {
                     showSnackBar("手机号格式不正确");
@@ -101,7 +100,7 @@ public class FindPasswordActivity extends BeamBaseActivity<FindPasswordActivityP
                     dismissProgressDialog();
                 }
                 else{
-                    findPasswordActivityPresenter.validateCode();
+                    findPasswordActivityPresenter.updatePassword(getInputPhone(),getInputPassword(),getInputCode());
                 }
 
             }

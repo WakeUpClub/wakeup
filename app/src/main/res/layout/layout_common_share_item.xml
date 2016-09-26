@@ -56,9 +56,9 @@
         <ImageView
             android:id="@+id/iv_imageDesc"
             android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/splash01"
             />
     </LinearLayout>

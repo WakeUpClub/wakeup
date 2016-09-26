@@ -1,16 +1,11 @@
 package com.wakeup.forever.wakeup.model.DataManager;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.wakeup.forever.wakeup.config.Api;
 import com.wakeup.forever.wakeup.model.bean.HttpResult;
 import com.wakeup.forever.wakeup.model.bean.SplashImage;
 import com.wakeup.forever.wakeup.model.service.ImageService;
+import com.wakeup.forever.wakeup.utils.RetrofitUtil;
 
-import java.util.concurrent.TimeUnit;
-
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import retrofit2.Retrofit;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -27,14 +22,7 @@ public class GetPictureFormUrl {
     private ImageService imageService;
 
     private GetPictureFormUrl() {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.setConnectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-        retrofit = new Retrofit.Builder()
-                .baseUrl(Api.BASE_URL)
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
+        retrofit= RetrofitUtil.getRetrofit();
         imageService=retrofit.create(ImageService.class);
     }
 

@@ -24,7 +24,6 @@ import com.wakeup.forever.wakeup.utils.ToastUtil;
 import com.wakeup.forever.wakeup.view.activity.CalendarActivity;
 import com.wakeup.forever.wakeup.view.activity.HomeDetailActivity;
 import com.wakeup.forever.wakeup.view.activity.LoginActivity;
-import com.wakeup.forever.wakeup.view.activity.RunTraceActivity;
 import com.wakeup.forever.wakeup.widget.CircleImageView;
 
 import butterknife.Bind;
@@ -130,8 +129,7 @@ public class HomeFragment extends BeamFragment<HomeFragmentPresenter> {
         rlPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getContext(), RunTraceActivity.class);
-                startActivity(i);
+                ToastUtil.showText("开发中。。。");
             }
         });
 
@@ -145,7 +143,9 @@ public class HomeFragment extends BeamFragment<HomeFragmentPresenter> {
         rlAboutUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtil.showText("开发中。。。");
+                Intent i = new Intent(getContext(), HomeDetailActivity.class);
+                i.putExtra(GlobalConstant.FLAG, HomeDetailActivity.ABOUT);
+                startActivity(i);
             }
         });
     }

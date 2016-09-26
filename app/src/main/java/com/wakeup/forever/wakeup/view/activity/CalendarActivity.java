@@ -1,15 +1,21 @@
 package com.wakeup.forever.wakeup.view.activity;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Window;
 
-import com.dsw.calendar.views.CircleCalendarView;
 import com.jude.beam.bijection.RequiresPresenter;
 import com.jude.beam.expansion.BeamBaseActivity;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.wakeup.forever.wakeup.R;
 import com.wakeup.forever.wakeup.model.DataManager.ActivityManager;
 import com.wakeup.forever.wakeup.presenter.activityPresenter.CalendarActivityPresenter;
+import com.wakeup.forever.wakeup.widget.MySelectorDecorator;
+import com.wakeup.forever.wakeup.widget.SignUpDecorator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,10 +29,14 @@ import butterknife.ButterKnife;
 
 @RequiresPresenter(CalendarActivityPresenter.class)
 public class CalendarActivity extends BeamBaseActivity<CalendarActivityPresenter> {
-    @Bind(R.id.circleMonthView)
-    CircleCalendarView circleCalendarView;
-    private ArrayList<Calendar> calendarArrayList;
+    @Bind(R.id.mcv_calendarView)
+    MaterialCalendarView mcvCalendarView;
+
+
+    //private ArrayList<Calendar> calendarArrayList;
     private ProgressDialog progressDialog;
+
+    private MySelectorDecorator mySelectorDecorator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,24 +45,62 @@ public class CalendarActivity extends BeamBaseActivity<CalendarActivityPresenter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_circle_calendar_view);
         ButterKnife.bind(this);
-        calendarArrayList = new ArrayList<Calendar>();
-        getPresenter().initData();
+        /*calendarArrayList = new ArrayList<Calendar>();
+        getPresenter().initData();*/
+        initData();
         initView();
+
     }
 
-    public void initView() {
-        circleCalendarView.setonMonthChangeListener(new CircleCalendarView.OnMonthChangeListener() {
+    private void initData() {
+        mySelectorDecorator=new MySelectorDecorator(this);
+        getPresenter().initData();
+    }
+
+    public void onGetSignDays(ArrayList<Calendar> calendars){
+        ArrayList<CalendarDay> dates = new ArrayList<>();
+        for(Calendar calendar:calendars){
+            CalendarDay day = CalendarDay.from(calendar);
+            dates.add(day);
+        }
+        mcvCalendarView.addDecorator(new SignUpDecorator(Color.RED, dates));
+
+    }
+
+    public  void initView() {
+        mcvCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
-            public void onMonthChanged(int year, int month) {
-                circleCalendarView.setCalendarInfos(year, month + 2, getSignDays(year, month + 1));
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                /*signUpDecorator.setDate(date.getDate());
+                widget.invalidateDecorators();*/
+                mySelectorDecorator.setDate(date);
+                mcvCalendarView.invalidateDecorators();
             }
         });
-        // circleCalendarView.leftClick();
+        mcvCalendarView.setShowOtherDates(MaterialCalendarView.SHOW_ALL);
+        Calendar instance = Calendar.getInstance();
+        mcvCalendarView.setSelectedDate(instance.getTime());
+
+        Calendar instance1 = Calendar.getInstance();
+        instance1.set(instance1.get(Calendar.YEAR), Calendar.JANUARY, 1);
+
+        Calendar instance2 = Calendar.getInstance();
+        instance2.set(instance2.get(Calendar.YEAR), Calendar.DECEMBER, 31);
+
+        mcvCalendarView.state().edit()
+                .setMinimumDate(instance1.getTime())
+                .setMaximumDate(instance2.getTime())
+                .commit();
+
+        mcvCalendarView.addDecorator(mySelectorDecorator);//设置选中时的日期样式
+
+        mySelectorDecorator.setDate(CalendarDay.today());
+        mcvCalendarView.invalidateDecorators();
     }
 
-    public ArrayList<Calendar> getCalendarArrayList() {
+    /*public ArrayList<Calendar> getCalendarArrayList() {
         return calendarArrayList;
-    }
+    }*/
 
     public void showProgressDialog() {
         progressDialog = new ProgressDialog(this, R.style.AppTheme_Dark_Dialog);
@@ -65,7 +113,7 @@ public class CalendarActivity extends BeamBaseActivity<CalendarActivityPresenter
         progressDialog.dismiss();
     }
 
-    public ArrayList<Integer> getSignDays(int year, int month) {
+    /*public ArrayList<Integer> getSignDays(int year, int month) {
         ArrayList<Integer> days = new ArrayList<Integer>();
 
         for (Calendar calendar : calendarArrayList) {
@@ -76,10 +124,7 @@ public class CalendarActivity extends BeamBaseActivity<CalendarActivityPresenter
         }
         return days;
     }
-
-    public CircleCalendarView getCircleCalendarView() {
-        return circleCalendarView;
-    }
+    */
 
 
 }

@@ -15,7 +15,11 @@ public class GlobalConstant {
 
     public static String TOKEN="token";
 
-    public static String ERROR_MESSAGE="床君累崩溃了，累觉不爱";
+    public static String ERROR_MESSAGE="请检查网络，亲";
 
     public static String INPUT_EMPTY_MESSAGE="请不要设置为空,亲";
+
+    public static String ABOUT_US_URL="http://121.42.163.226:8080/wakeup/html/index.html";
+
+    public static String USER_ID;
 }

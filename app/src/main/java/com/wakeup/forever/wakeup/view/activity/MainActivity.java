@@ -17,7 +17,6 @@ import com.jude.beam.expansion.BeamBaseActivity;
 import com.wakeup.forever.wakeup.R;
 import com.wakeup.forever.wakeup.model.DataManager.ActivityManager;
 import com.wakeup.forever.wakeup.presenter.activityPresenter.MainActivityPresenter;
-import com.wakeup.forever.wakeup.utils.LogUtil;
 import com.wakeup.forever.wakeup.utils.ToastUtil;
 import com.wakeup.forever.wakeup.view.fragment.HomeFragment;
 import com.wakeup.forever.wakeup.view.fragment.MainFragment;
@@ -55,7 +54,6 @@ public class MainActivity extends BeamBaseActivity<MainActivityPresenter> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        LogUtil.e("onCreate");
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         ActivityManager.addActivity(this);
         super.onCreate(savedInstanceState);
@@ -66,7 +64,6 @@ public class MainActivity extends BeamBaseActivity<MainActivityPresenter> {
     }
 
     public void initView(){
-        LogUtil.e("initView");
         //初始化fragment
         mainFragment=new MainFragment();
         updateFragment=new UpdateFragment();
@@ -119,7 +116,6 @@ public class MainActivity extends BeamBaseActivity<MainActivityPresenter> {
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
-        LogUtil.e(fragment.toString());
         if(mainFragment==null&&fragment instanceof MainFragment){
             mainFragment= (MainFragment) fragment;
         }
@@ -134,6 +130,5 @@ public class MainActivity extends BeamBaseActivity<MainActivityPresenter> {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
        // super.onSaveInstanceState(outState);
-        LogUtil.e("onSaveInstanceState");
     }
 }

@@ -121,7 +121,10 @@ public class PublishCommonShareActivity extends BeamBaseActivity<PublishCommonSh
     }
 
     public void dismissProgressDialog() {
-        progressDialog.dismiss();
+        if(progressDialog!=null){
+            progressDialog.dismiss();
+        }
+
     }
 
 

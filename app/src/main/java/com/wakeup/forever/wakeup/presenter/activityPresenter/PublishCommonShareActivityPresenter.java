@@ -11,8 +11,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.jude.beam.expansion.BeamBasePresenter;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.RequestBody;
 import com.wakeup.forever.wakeup.base.BaseSubscriber;
 import com.wakeup.forever.wakeup.config.GlobalConstant;
 import com.wakeup.forever.wakeup.model.DataManager.ShareDataManager;
@@ -26,6 +24,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * Created by forever on 2016/8/30.

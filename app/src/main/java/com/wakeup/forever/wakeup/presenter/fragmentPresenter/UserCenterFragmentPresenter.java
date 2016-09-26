@@ -7,8 +7,6 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 
 import com.jude.beam.expansion.BeamBasePresenter;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.RequestBody;
 import com.wakeup.forever.wakeup.app.App;
 import com.wakeup.forever.wakeup.base.BaseSubscriber;
 import com.wakeup.forever.wakeup.config.GlobalConstant;
@@ -26,6 +24,9 @@ import com.wakeup.forever.wakeup.view.fragment.UserCenterFragment;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * Created by forever on 2016/8/22.
@@ -59,6 +60,7 @@ public class UserCenterFragmentPresenter extends BeamBasePresenter<UserCenterFra
                 if (userHttpResult.getResultCode() == 200) {
                     userCenterFragment.showUserInfo(userHttpResult.getData());
                     UserCacheManager.getInstance(getView().getContext()).updateUser(userHttpResult.getData());
+                    PrefUtils.setString(getView().getContext(),GlobalConstant.USER_ID,userHttpResult.getData().getId()+"");
                 } else {
                     ToastUtil.showText("未知错误");
                 }
@@ -134,11 +136,22 @@ public class UserCenterFragmentPresenter extends BeamBasePresenter<UserCenterFra
 
     public void updateUserInfo(User user) {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("name", user.getName());
-        map.put("sex", user.getSex());
-        map.put("signature", user.getSignature());
-        map.put("campus", user.getCampus());
-        map.put("birth", user.getBirth());
+        if(user.getName()!=null){
+            map.put("name", user.getName());
+        }
+        if(user.getSex()!=null){
+            map.put("sex", user.getSex());
+        }
+        if(user.getSignature()!=null){
+            map.put("signature", user.getSignature());
+        }
+        if(user.getCampus()!=null){
+            map.put("campus", user.getCampus());
+        }
+        if(user.getBirth()!=null){
+            map.put("birth", user.getBirth());
+        }
+
         UserDataManager.getInstance().updateUserInfo(map, new BaseSubscriber<HttpResult<User>>(userCenterFragment.getActivity()) {
             @Override
             public void onSuccess(HttpResult<User> userHttpResult) {

@@ -3,7 +3,7 @@ package com.wakeup.forever.wakeup.model.service;
 import com.wakeup.forever.wakeup.model.bean.HttpResult;
 import com.wakeup.forever.wakeup.model.bean.SplashImage;
 
-import retrofit.http.GET;
+import retrofit2.http.GET;
 import rx.Observable;
 
 /**

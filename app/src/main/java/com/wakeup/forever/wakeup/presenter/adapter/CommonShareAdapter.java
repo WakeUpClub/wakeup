@@ -1,5 +1,6 @@
 package com.wakeup.forever.wakeup.presenter.adapter;
 
+import android.content.Intent;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.wakeup.forever.wakeup.model.DataManager.UserCacheManager;
 import com.wakeup.forever.wakeup.model.bean.CommonShare;
 import com.wakeup.forever.wakeup.model.bean.CommonShareComment;
 import com.wakeup.forever.wakeup.model.bean.CommonShareLike;
+import com.wakeup.forever.wakeup.view.activity.ImageDetailActivity;
 import com.wakeup.forever.wakeup.view.fragment.CommonShareFragment;
 import com.wakeup.forever.wakeup.view.viewholder.CommonShareHolder;
 
@@ -108,6 +110,15 @@ public class CommonShareAdapter extends RecyclerView.Adapter<CommonShareHolder> 
                     }
                 });
 
+            }
+        });
+
+        holder.getIvImageDesc().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(context.getContext(), ImageDetailActivity.class);
+                i.putExtra("imageUrl",commonShare.getImageDesc());
+                context.getContext().startActivity(i);
             }
         });
     }

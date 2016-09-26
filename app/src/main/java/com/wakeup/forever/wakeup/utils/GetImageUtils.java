@@ -76,7 +76,7 @@ public class GetImageUtils {
     // 调用系统相册
     public void startPick(DialogInterface dialog) {
         dialog.dismiss();
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+        Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 "image/*");
         mActivity.startActivityForResult(intent, PHOTO_PICK);

@@ -13,6 +13,7 @@ import com.wakeup.forever.wakeup.R;
 import com.wakeup.forever.wakeup.config.GlobalConstant;
 import com.wakeup.forever.wakeup.model.DataManager.ActivityManager;
 import com.wakeup.forever.wakeup.presenter.activityPresenter.HomeDetailActivityPresenter;
+import com.wakeup.forever.wakeup.view.fragment.AboutUsFragment;
 import com.wakeup.forever.wakeup.view.fragment.SettingFragment;
 import com.wakeup.forever.wakeup.view.fragment.UserCenterFragment;
 
@@ -27,6 +28,7 @@ public class HomeDetailActivity extends BeamBaseActivity<HomeDetailActivityPrese
 
     public static final int USER_CENTER=1;
     public  static final int SETTING=2;
+    public static final int ABOUT=3;
 
     private FragmentManager fragmentManager;
     private ProgressDialog progressDialog;
@@ -56,6 +58,9 @@ public class HomeDetailActivity extends BeamBaseActivity<HomeDetailActivityPrese
                 break;
             case SETTING:
                 fragmentTransaction.replace(R.id.fl_homeDetail,new SettingFragment());
+                break;
+            case ABOUT:
+                fragmentTransaction.replace(R.id.fl_homeDetail,new AboutUsFragment());
                 break;
             default:
                 break;

@@ -43,7 +43,6 @@ public class OfficialShareFragmentPresenter extends BeamBasePresenter<OfficialSh
             @Override
             public void onError(Throwable e) {
                 getView().stopRefresh();
-                ToastUtil.showText(e.getMessage());
             }
 
             @Override

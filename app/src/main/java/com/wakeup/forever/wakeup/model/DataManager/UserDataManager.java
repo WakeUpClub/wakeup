@@ -1,8 +1,5 @@
 package com.wakeup.forever.wakeup.model.DataManager;
 
-import android.util.Log;
-
-import com.squareup.okhttp.RequestBody;
 import com.wakeup.forever.wakeup.app.App;
 import com.wakeup.forever.wakeup.base.BaseSubscriber;
 import com.wakeup.forever.wakeup.config.GlobalConstant;
@@ -16,6 +13,7 @@ import com.wakeup.forever.wakeup.utils.RetrofitUtil;
 import java.util.ArrayList;
 import java.util.Map;
 
+import okhttp3.RequestBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -51,8 +49,8 @@ public class UserDataManager {
                 .subscribe(subscriber);
     }
 
-    public void register(String name,String password,Subscriber<HttpResult<User>> subscriber){
-        userService.register(name,password)
+    public void register(String name,String password,String code,Subscriber<HttpResult<User>> subscriber){
+        userService.register(name,password,code)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -68,7 +66,7 @@ public class UserDataManager {
                 .subscribe(subscriber);
     }
 
-    public void uploadHeadUrl(RequestBody requestBody,BaseSubscriber<HttpResult<User>> subscriber){
+    public void uploadHeadUrl(RequestBody requestBody, BaseSubscriber<HttpResult<User>> subscriber){
         String token= PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN,"");
         userService.uploadHeadUrl(token,requestBody)
                 .subscribeOn(Schedulers.io())
@@ -80,7 +78,6 @@ public class UserDataManager {
 
     public void updateUserInfo(Map<String,Object> user, BaseSubscriber<HttpResult<User>> subscriber){
         String token= PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN,"");
-        Log.e("zs",token);
         userService.updateUserInfo(token,user)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -116,8 +113,8 @@ public class UserDataManager {
                 .subscribe(subscriber);
     }
 
-    public void updatePassword(String phone,String password,Subscriber<HttpResult<User>> subscriber){
-        userService.updatePassword(phone,password)
+    public void updatePassword(String phone,String password,String code,Subscriber<HttpResult<User>> subscriber){
+        userService.updatePassword(phone,password,code)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -134,6 +131,14 @@ public class UserDataManager {
 
     public void allPointRank(Map<String,Object> queryMap,Subscriber<HttpResult<ArrayList<UserPoint>>> subscriber){
         userService.allPointRank(queryMap)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void getCheckCode(String phone,Subscriber<HttpResult<String>> subscriber){
+        userService.getCheckCode(phone)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

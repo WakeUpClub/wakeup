@@ -11,17 +11,20 @@
     android:background="@drawable/calendar_background"
     tools:context=".view.activity.CalendarActivity"
     >
-    <ImageView
+    <!--<ImageView
         android:layout_height="80dp"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/logo_word"
-        ></ImageView>
-    <com.dsw.calendar.views.CircleCalendarView
-        android:id="@+id/circleMonthView"
+        ></ImageView>-->
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/mcv_calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:mcv_showOtherDates="all"
+        app:mcv_selectionColor="#00F"
         />
     <RelativeLayout
         android:layout_height="match_parent"

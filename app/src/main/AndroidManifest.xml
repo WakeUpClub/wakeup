@@ -78,6 +78,7 @@
             android:name=".view.activity.RunTraceActivity"
             android:label="@string/title_activity_run_trace"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".view.activity.ImageDetailActivity"></activity>
     </application>
 
 </manifest>

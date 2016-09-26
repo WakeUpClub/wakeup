@@ -7,7 +7,6 @@ import com.wakeup.forever.wakeup.model.DataManager.ShareCacheManager;
 import com.wakeup.forever.wakeup.model.DataManager.ShareDataManager;
 import com.wakeup.forever.wakeup.model.bean.CommonShare;
 import com.wakeup.forever.wakeup.model.bean.HttpResult;
-import com.wakeup.forever.wakeup.utils.LogUtil;
 import com.wakeup.forever.wakeup.utils.ToastUtil;
 import com.wakeup.forever.wakeup.view.fragment.CommonShareFragment;
 
@@ -42,7 +41,7 @@ public class CommonShareFragmentPresenter extends BeamBasePresenter<CommonShareF
 
             @Override
             public void onError(Throwable e) {
-                LogUtil.e(e.getMessage()+"納尼");
+                getView().refreshData();
             }
         });
     }
@@ -71,6 +70,7 @@ public class CommonShareFragmentPresenter extends BeamBasePresenter<CommonShareF
             @Override
             public void onError(Throwable e) {
                 getView().refreshData();
+                ToastUtil.showText(GlobalConstant.ERROR_MESSAGE);
             }
         });
     }

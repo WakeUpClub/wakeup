@@ -5,14 +5,12 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 
 import com.jude.beam.expansion.BeamBasePresenter;
+import com.wakeup.forever.wakeup.config.GlobalConstant;
 import com.wakeup.forever.wakeup.model.DataManager.UserDataManager;
 import com.wakeup.forever.wakeup.model.bean.HttpResult;
 import com.wakeup.forever.wakeup.model.bean.User;
 import com.wakeup.forever.wakeup.utils.ToastUtil;
 import com.wakeup.forever.wakeup.view.activity.RegisterActivity;
-
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
 import rx.Subscriber;
 
 /**
@@ -26,10 +24,10 @@ public class RegisterActivityPresenter extends BeamBasePresenter<RegisterActivit
     protected void onCreate(@NonNull RegisterActivity view, Bundle savedState) {
         super.onCreate(view, savedState);
         registerActivity=getView();
-        initMob();
+        //initMob();
     }
 
-    private void initMob() {
+    /*private void initMob() {
         EventHandler eh=new EventHandler(){
             @Override
             public void afterEvent(int event, int result, Object data) {
@@ -55,12 +53,29 @@ public class RegisterActivityPresenter extends BeamBasePresenter<RegisterActivit
             }
         };
         SMSSDK.registerEventHandler(eh);
-    }
+    }*/
 
-    public void getCode(){
+    public void getCode(String phone){
         //发送短信验证码
-        SMSSDK.getVerificationCode("86",registerActivity.getInputPhone());
+        //SMSSDK.getVerificationCode("86",registerActivity.getInputPhone());
 
+        UserDataManager userDataManager=UserDataManager.getInstance();
+        userDataManager.getCheckCode(phone, new Subscriber<HttpResult<String>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                ToastUtil.showText(GlobalConstant.ERROR_MESSAGE);
+            }
+
+            @Override
+            public void onNext(HttpResult<String> stringHttpResult) {
+                ToastUtil.showText(stringHttpResult.getMessage());
+            }
+        });
         //改变button的状态
         new Thread(){
             @Override
@@ -84,14 +99,13 @@ public class RegisterActivityPresenter extends BeamBasePresenter<RegisterActivit
     }
 
     public void validateCode(){
-        SMSSDK.submitVerificationCode("86",registerActivity.getInputPhone(),registerActivity.getInputCode());
+        //SMSSDK.submitVerificationCode("86",registerActivity.getInputPhone(),registerActivity.getInputCode());
     }
 
-    public void register(){
-        String phone=registerActivity.getInputPhone();
-        String password=registerActivity.getInputPassword();
+    public void register(String phone,String password,String code){
+        getView().showProgressDialog();
         UserDataManager userDataManager=UserDataManager.getInstance();
-        userDataManager.register(phone, password, new Subscriber<HttpResult<User>>() {
+        userDataManager.register(phone, password,code, new Subscriber<HttpResult<User>>() {
             @Override
             public void onCompleted() {
 
@@ -99,17 +113,18 @@ public class RegisterActivityPresenter extends BeamBasePresenter<RegisterActivit
 
             @Override
             public void onError(Throwable e) {
-
+                getView().dismissProgressDialog();
             }
 
             @Override
             public void onNext(HttpResult<User> userHttpResult) {
+                getView().dismissProgressDialog();
                 if(userHttpResult.getResultCode()==200){
                     ToastUtil.showText("注册成功");
                     registerActivity.jumpToLoginAty();
                 }
                 else{
-                    registerActivity.showSnackBar("该账号已被注册");
+                    registerActivity.showSnackBar(userHttpResult.getMessage());
                 }
             }
         });

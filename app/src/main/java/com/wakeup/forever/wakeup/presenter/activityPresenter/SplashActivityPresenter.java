@@ -2,7 +2,6 @@ package com.wakeup.forever.wakeup.presenter.activityPresenter;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -32,18 +31,16 @@ public class SplashActivityPresenter extends Presenter<SplashActivity>{
         GetPictureFormUrl.getInstance().getImage(new Subscriber<HttpResult<SplashImage>>() {
             @Override
             public void onCompleted() {
-                Log.e("zs","完成");
+
             }
 
             @Override
             public void onError(Throwable e) {
                 getView().startMainActivity();
-                Log.e("zs","失败");
             }
 
             @Override
             public void onNext(HttpResult<SplashImage> splashImageHttpResult) {
-                Log.e("zs",splashImageHttpResult.getData().getImageUrl());
                 getView().showView(splashImageHttpResult.getData().getImageUrl());
             }
         });

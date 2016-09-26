@@ -2,7 +2,6 @@ package com.wakeup.forever.wakeup.view.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -53,11 +52,11 @@ public class RegisterActivity extends BeamBaseActivity<RegisterActivityPresenter
                 btnGetCode.setText(count + "");
                 if (count == 0) {
                     btnGetCode.setClickable(true);
-                    btnGetCode.setBackgroundColor(Color.GREEN);
+                    btnGetCode.setBackgroundColor(getResources().getColor(R.color.mainColor));
                     btnGetCode.setText("获取验证码");
                 } else {
                     btnGetCode.setClickable(false);
-                    btnGetCode.setBackgroundColor(getResources().getColor(R.color.mainColor));
+                    btnGetCode.setBackgroundColor(getResources().getColor(R.color.bitGray));
                 }
             }
         }
@@ -83,14 +82,13 @@ public class RegisterActivity extends BeamBaseActivity<RegisterActivityPresenter
         btnGetCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registerActivityPresenter.getCode();
+                registerActivityPresenter.getCode(getInputPhone());
             }
         });
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog();
 
                 if (!CheckUtil.checkPhone(inputPhone.getText().toString())) {
                         showSnackBar("手机号格式不正确");
@@ -101,7 +99,7 @@ public class RegisterActivity extends BeamBaseActivity<RegisterActivityPresenter
                     dismissProgressDialog();
                 }
                 else{
-                    registerActivityPresenter.validateCode();
+                    registerActivityPresenter.register(getInputPhone(),getInputPassword(),getInputCode());
                 }
 
             }
@@ -151,10 +149,15 @@ public class RegisterActivity extends BeamBaseActivity<RegisterActivityPresenter
     }
 
     public void dismissProgressDialog() {
-        progressDialog.dismiss();
+        if(progressDialog!=null){
+            progressDialog.dismiss();
+        }
+
     }
 
     public boolean checkProgressDialogIsNull(){
         return progressDialog==null;
     }
+
+
 }

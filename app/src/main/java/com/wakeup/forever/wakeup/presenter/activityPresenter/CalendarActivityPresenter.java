@@ -11,7 +11,6 @@ import com.wakeup.forever.wakeup.view.activity.CalendarActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by forever on 2016/9/1.
@@ -22,17 +21,15 @@ public class CalendarActivityPresenter extends BeamBasePresenter<CalendarActivit
         UserDataManager.getInstance().getSignInfo(new BaseSubscriber<HttpResult<ArrayList<Long>>>(getView()) {
             @Override
             public void onSuccess(HttpResult<ArrayList<Long>> arrayListHttpResult) {
-                if (arrayListHttpResult.getResultCode() == 200)
+                if (arrayListHttpResult.getResultCode() == 200) {
+                    ArrayList<Calendar> calendarArrayList=new ArrayList<Calendar>();
                     for (Long day : arrayListHttpResult.getData()) {
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(day);
-                        getView().getCalendarArrayList().add(calendar);
-                        Date date = new Date();
-                        date.setTime(calendar.getTimeInMillis());
-                        int year = calendar.get(Calendar.YEAR);
-                        int month = calendar.get(Calendar.MONTH);
-                        getView().getCircleCalendarView().setCalendarInfos(year, month + 2, getView().getSignDays(year, month + 1));
+                        calendarArrayList.add(calendar);
                     }
+                    getView().onGetSignDays(calendarArrayList);
+                }
                 else {
                     ToastUtil.showText(GlobalConstant.ERROR_MESSAGE);
                 }

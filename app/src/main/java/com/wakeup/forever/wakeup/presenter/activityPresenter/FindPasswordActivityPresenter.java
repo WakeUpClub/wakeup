@@ -11,9 +11,8 @@ import com.wakeup.forever.wakeup.model.bean.HttpResult;
 import com.wakeup.forever.wakeup.model.bean.User;
 import com.wakeup.forever.wakeup.utils.ToastUtil;
 import com.wakeup.forever.wakeup.view.activity.FindPasswordActivity;
+import com.wakeup.forever.wakeup.view.activity.RegisterActivity;
 
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
 import rx.Subscriber;
 
 /**
@@ -24,10 +23,10 @@ public class FindPasswordActivityPresenter extends BeamBasePresenter<FindPasswor
     @Override
     protected void onCreate(@NonNull FindPasswordActivity view, Bundle savedState) {
         super.onCreate(view, savedState);
-        initMob();
+       // initMob();
     }
 
-    private void initMob() {
+   /* private void initMob() {
         EventHandler eh=new EventHandler(){
             @Override
             public void afterEvent(int event, int result, Object data) {
@@ -49,12 +48,26 @@ public class FindPasswordActivityPresenter extends BeamBasePresenter<FindPasswor
             }
         };
         SMSSDK.registerEventHandler(eh);
-    }
+    }*/
 
-    public void getCode(){
-        //发送短信验证码
-        SMSSDK.getVerificationCode("86",getView().getInputPhone());
+    public void getCode(String phone){
+        UserDataManager userDataManager=UserDataManager.getInstance();
+        userDataManager.getCheckCode(phone, new Subscriber<HttpResult<String>>() {
+            @Override
+            public void onCompleted() {
 
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                ToastUtil.showText(GlobalConstant.ERROR_MESSAGE);
+            }
+
+            @Override
+            public void onNext(HttpResult<String> stringHttpResult) {
+                ToastUtil.showText(stringHttpResult.getMessage());
+            }
+        });
         //改变button的状态
         new Thread(){
             @Override
@@ -63,7 +76,7 @@ public class FindPasswordActivityPresenter extends BeamBasePresenter<FindPasswor
                 for(int i=60;i>=0;i--){
                     try {
                         Message message=new Message();
-                        message.what=getView().COUNTDOWN;
+                        message.what= RegisterActivity.COUNTDOWN;
                         Bundle data=new Bundle();
                         data.putInt("count",i);
                         message.setData(data);
@@ -78,14 +91,13 @@ public class FindPasswordActivityPresenter extends BeamBasePresenter<FindPasswor
     }
 
     public void validateCode(){
-        SMSSDK.submitVerificationCode("86",getView().getInputPhone(),getView().getInputCode());
+        //SMSSDK.submitVerificationCode("86",getView().getInputPhone(),getView().getInputCode());
     }
 
-    public void updatePassword(){
-        String phone=getView().getInputPhone();
-        String password=getView().getInputPassword();
+    public void updatePassword(String phone,String password,String code){
+        getView().showProgressDialog();
         UserDataManager userDataManager=UserDataManager.getInstance();
-        userDataManager.updatePassword(phone, password, new Subscriber<HttpResult<User>>() {
+        userDataManager.updatePassword(phone, password,code, new Subscriber<HttpResult<User>>() {
             @Override
             public void onCompleted() {
 
@@ -93,13 +105,15 @@ public class FindPasswordActivityPresenter extends BeamBasePresenter<FindPasswor
 
             @Override
             public void onError(Throwable e) {
+                getView().dismissProgressDialog();
                 ToastUtil.showText(GlobalConstant.ERROR_MESSAGE);
             }
 
             @Override
             public void onNext(HttpResult<User> userHttpResult) {
+                getView().dismissProgressDialog();
                 if(userHttpResult.getResultCode()==200){
-                    ToastUtil.showText("注册成功");
+                    ToastUtil.showText("修改成功");
                     getView().jumpToLoginAty();
                 }
                 else{

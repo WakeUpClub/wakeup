@@ -40,10 +40,11 @@ public class UserCacheManager {
     }
 
     public User getUser() {
-        String token = PrefUtils.getString(App.getGlobalContext(), GlobalConstant.TOKEN, "");
+        int userId = Integer.parseInt(PrefUtils.getString(App.getGlobalContext(), GlobalConstant.USER_ID, "3"));
+
         User user = null;
         try {
-            user = userDao.queryBuilder().where().eq("token", token).queryForFirst();
+            user = userDao.queryBuilder().where().eq("id", userId).queryForFirst();
         } catch (SQLException e) {
             LogUtil.e(e.getMessage());
         }
